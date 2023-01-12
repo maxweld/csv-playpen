@@ -14,7 +14,44 @@ struct Record {
     name: String,
     totalprice: f64,
     price: f64,
+    // from: String,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "PascalCase")]
+struct RateRecord {
+    #[serde(rename = "Membership Code")]
+    membership: String,
+    #[serde(rename = "Centre Id")]
+    centre: String,
+    name: String,
+    #[serde(rename = "Total Price")]
+    total_price: f64,
+    price: f64,
     from: String,
+    to: Option<String>,
+    #[serde(rename = "Price Date")]
+    price_date: Option<String>,
+    season: Option<String>,
+    #[serde(rename = "Budget Code")]
+    budget_code: String,
+    #[serde(rename = "Cost Centre")]
+    cost_centre: Option<String>,
+    #[serde(rename = "No of Payments")]
+    no_of_payments: i32,
+    #[serde(rename = "Type")]
+    membership_type: String,
+    duration: String,
+    category: String,
+    period: String,
+    class: Option<String>,
+    status: String,
+    #[serde(rename = "Start Date")]
+    start_date: String,
+    #[serde(rename = "Application Date")]
+    application_date: String,
+    // #[serde(rename = "Membership Rules")]
+    // membership_rules: Vec<u8>,
 }
 
 fn run() -> Result<(), Box<dyn Error>> {
@@ -24,8 +61,8 @@ fn run() -> Result<(), Box<dyn Error>> {
     let mut rdr = csv::Reader::from_reader(file);
 
     for result in rdr.deserialize() {
-        let record: Record = result?;
-        println!("{:?}", record);
+        let record: RateRecord = result?;
+        println!("{:#?}", record);
     }
 
     Ok(())
