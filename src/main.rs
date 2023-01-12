@@ -41,8 +41,8 @@ struct RateRecord {
     start_date: String,
     #[serde(rename = "Application Date")]
     application_date: String,
-    // #[serde(rename = "Membership Rules")]
-    // membership_rules: Vec<u8>,
+    #[serde(rename = "Membership Rules")]
+    membership_rules: String,
 }
 
 fn run() -> Result<(), Box<dyn Error>> {
