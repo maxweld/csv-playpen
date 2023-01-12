@@ -8,17 +8,8 @@ use std::process;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-struct Record {
-    membership: String,
-    centre: u64,
-    name: String,
-    totalprice: f64,
-    price: f64,
-    // from: String,
-}
-
-#[derive(Debug, Deserialize)]
 #[serde(rename_all = "PascalCase")]
+#[allow(dead_code)]
 struct RateRecord {
     #[serde(rename = "Membership Code")]
     membership: String,
@@ -59,11 +50,15 @@ fn run() -> Result<(), Box<dyn Error>> {
     let file = File::open(file_path)?;
 
     let mut rdr = csv::Reader::from_reader(file);
+    let mut rates_records: Vec<RateRecord> = Vec::new();
 
     for result in rdr.deserialize() {
         let record: RateRecord = result?;
         println!("{:#?}", record);
+        rates_records.push(record);
     }
+
+    println!("{:#?}", rates_records[3]);
 
     Ok(())
 }
