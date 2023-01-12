@@ -5,14 +5,26 @@ use std::fs::File;
 // use std::io;
 use std::process;
 
+use serde::Deserialize;
+
+#[derive(Debug, Deserialize)]
+struct Record {
+    membership: String,
+    centre: u64,
+    name: String,
+    totalprice: f64,
+    price: f64,
+    from: String,
+}
+
 fn run() -> Result<(), Box<dyn Error>> {
     let file_path = get_first_arg()?;
     let file = File::open(file_path)?;
 
     let mut rdr = csv::Reader::from_reader(file);
 
-    for result in rdr.records() {
-        let record = result?;
+    for result in rdr.deserialize() {
+        let record: Record = result?;
         println!("{:?}", record);
     }
 
