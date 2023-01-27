@@ -1,9 +1,9 @@
 use std::env;
 use std::error::Error;
 use std::ffi::OsString;
-use std::fs::File;
-// use std::io;
 use std::process;
+use encoding_rs::WINDOWS_1252; // ISO 8859-1
+use encoding_rs_io::DecodeReaderBytesBuilder;
 
 use serde::Deserialize;
 
@@ -47,9 +47,13 @@ struct RateRecord {
 
 fn run() -> Result<(), Box<dyn Error>> {
     let file_path = get_first_arg()?;
-    let file = File::open(file_path)?;
-
+		
+		let file = DecodeReaderBytesBuilder::new()
+    .encoding(Some(WINDOWS_1252))
+    .build(std::fs::File::open(file_path).unwrap());
+		
     let mut rdr = csv::Reader::from_reader(file);
+
     let mut rates_records: Vec<RateRecord> = Vec::new();
 
     for result in rdr.deserialize() {
